@@ -48,19 +48,95 @@ a:hover { color: #222 }
   align-items: center;
   margin-top: 12px;
 }
+/* 批量下载行里有「停止」按钮时改用四列 */
+.batch:has(#batchStop:not([hidden])) {
+  grid-template-columns: minmax(96px, 120px) auto auto minmax(0, 1fr);
+}
+.batch button { width: auto; min-width: 0; padding: 0 14px }
+
+/* 本地曲库 */
+.lib-actions { display: flex; flex-wrap: wrap; gap: 8px }
+.lib-actions button { width: auto; min-width: 0; max-width: 100% }
+.lib-grid {
+  display: grid;
+  grid-template-columns: minmax(160px, 240px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+.field { display: grid; gap: 4px; font-size: 13px; color: #666 }
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+  min-width: 0;
+}
+input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+input[type="checkbox"]:checked { background: #222; border-color: #222 }
+input[type="checkbox"]:checked::after {
+  content: '';
+  display: block;
+  height: 100%;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  background: #fff;
+}
+input[type="checkbox"]:indeterminate { background: #888; border-color: #888 }
+input[type="checkbox"]:indeterminate::after {
+  content: '';
+  display: block;
+  height: 2px;
+  margin: 7px 3px;
+  background: #fff;
+}
+input[type="checkbox"]:disabled { opacity: .5; cursor: not-allowed }
+.lib-status { font-size: 14px; color: #666; overflow-wrap: anywhere }
+.lib-status.ok { color: #0a7a43 }
+.lib-status.warn { color: #8a6d1a }
+.lib-status.err { color: #c0392b }
+
+/* 筛选 */
+.filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  gap: 8px;
+  align-items: center;
+}
+.filters button { width: auto; min-width: 0; padding: 0 12px; font-size: 14px }
+.summary { font-size: 14px; color: #666 }
 
 /* 曲目列表 */
 .tracks { display: grid; gap: 8px; margin-top: 16px }
 .track {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr) minmax(64px, auto);
+  grid-template-columns: 18px 34px minmax(0, 1fr) auto auto;
   gap: 12px;
   align-items: center;
   padding: 12px;
   border: 1px solid #e5e5e5;
   border-radius: 8px;
 }
-.track div { min-width: 0 }
+.track .tinfo { min-width: 0 }
+.track .idx { color: #999; font-size: 13px; font-variant-numeric: tabular-nums }
+.track > button { width: auto; min-width: 72px; min-height: 36px; padding: 0 12px; font-size: 14px }
+.track.dim { background: #fafafa }
+.track.dim .tinfo strong { color: #999 }
+.track.dim .tinfo p { color: #bbb }
+.track.empty { grid-template-columns: 1fr; justify-items: center; color: #666 }
 .track strong {
   display: block;
   overflow: hidden;
@@ -68,6 +144,25 @@ a:hover { color: #222 }
   white-space: nowrap;
 }
 .track p { color: #666; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+
+/* 状态标签 */
+.badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end }
+.badge {
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 1px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  color: #666;
+  background: #fafafa;
+  white-space: nowrap;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.badge.have, .badge.saved { color: #0a7a43; border-color: #bfe3cf; background: #f1faf5 }
+.badge.maybe, .badge.dup { color: #8a6d1a; border-color: #ecdca7; background: #fdf8e8 }
+.badge.missing, .badge.fail { color: #c0392b; border-color: #f0c5bd; background: #fdf2f0 }
 
 /* 通用元素 */
 img {
@@ -127,17 +222,23 @@ button:disabled { opacity: .5 }
   .form { grid-template-columns: 1fr }
   .single { grid-template-columns: 1fr }
   .batch { grid-template-columns: 1fr }
+  .batch:has(#batchStop:not([hidden])) { grid-template-columns: 1fr }
   .api-panel { grid-template-columns: 1fr }
+  .lib-grid { grid-template-columns: 1fr }
+  .filters { grid-template-columns: 1fr }
   img {
     max-width: 240px;
     justify-self: center;
   }
   .track {
-    grid-template-columns: 28px minmax(0, 1fr);
+    grid-template-columns: 18px 30px minmax(0, 1fr);
   }
-  .track button {
-    grid-column: 2;
-    width: max-content;
-    max-width: 100%;
+  .track .badges {
+    grid-column: 2 / -1;
+    justify-content: flex-start;
+  }
+  .track > button {
+    grid-column: 2 / -1;
+    justify-self: start;
   }
 }

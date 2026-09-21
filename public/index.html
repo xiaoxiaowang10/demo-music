@@ -36,12 +36,32 @@
   </section>
   <p id="loading" hidden>请求中...</p>
 
+  <section class="box lib" id="libPanel">
+    <div class="lib-actions">
+      <button id="libPick" type="button" class="ghost">选择音乐文件夹</button>
+      <button id="libRescan" type="button" class="ghost" hidden>重新扫描</button>
+      <button id="libForget" type="button" class="ghost" hidden>移除授权</button>
+    </div>
+    <div class="lib-grid">
+      <label class="field">
+        <span>去重匹配</span>
+        <select id="matchMode">
+          <option value="exact" selected>严格（歌手 + 歌名）</option>
+          <option value="loose">宽松（仅歌名，翻唱易误判）</option>
+        </select>
+      </label>
+      <label class="check"><input id="skipExisting" type="checkbox" checked><span>跳过本地已有的歌曲，不再请求接口</span></label>
+    </div>
+    <p id="libStatus" class="lib-status" aria-live="polite">未选择本地音乐文件夹。</p>
+  </section>
+
   <section class="box single" id="singleCard" hidden>
     <img id="singleCover" alt="">
     <div>
       <h2 id="singleTitle">-</h2>
       <p id="singleMeta">-</p>
       <p id="singleExtra">-</p>
+      <p id="singleMatch" class="lib-status" hidden></p>
       <audio id="singleAudio" controls></audio>
       <button id="singleDownload">下载</button>
     </div>
@@ -61,11 +81,21 @@
             <option value="180000">3min</option>
             <option value="600000" selected>10min</option>
           </select>
-          <button id="batchDl">批量下载</button>
+          <button id="batchDl">下载选中</button>
+          <button id="batchStop" type="button" class="ghost" hidden>停止</button>
           <span id="progress">等待</span>
         </div>
       </div>
     </div>
+
+    <div class="filters">
+      <input id="trackFilter" type="search" placeholder="筛选：歌名 / 歌手 / 专辑">
+      <label class="check"><input id="hideDownloaded" type="checkbox"><span>隐藏已下载</span></label>
+      <button id="pickMissing" type="button" class="ghost">选中待下载</button>
+      <button id="clearPick" type="button" class="ghost">清空选择</button>
+    </div>
+    <p id="trackSummary" class="summary"></p>
+
     <div id="tracks" class="tracks"></div>
   </section>
 </main>
@@ -73,6 +103,7 @@
 <script src="/js/md5.js"></script>
 <script src="/js/utils.js"></script>
 <script src="/js/api.js"></script>
+<script src="/js/local-library.js"></script>
 <script src="/js/app.js"></script>
 </body>
 </html>
